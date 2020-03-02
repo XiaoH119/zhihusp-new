@@ -26,16 +26,16 @@ public class CoderService {
 	 */
 	public Response getCoder(Coder coder) {
 		Response res = new Response();
-		res.setErrormessage("正确完成");
 		List<Coder> codelist = codermapper.getcoder(coder);
 		System.out.println("codelist=" + codelist.size());
 		logger.debug("codelist==debug==" + codelist.size());
 		logger.info("codelist==info==" + codelist.size());
 		logger.error("codelist==error==" + codelist.size());
 		logger.trace("codelist==trace==" + codelist.size());
-		if (codelist.size() > 0) {
-			res.setCodelist(codelist);
-		}
+//		if (codelist.size() > 0) {
+//			res.setCodelist(codelist);
+//		}
+		res.setData(codelist);
 		return res;
 	}
 }

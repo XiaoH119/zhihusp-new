@@ -38,7 +38,7 @@ public class ExtensionService {
 		try {
 			Response res = new Response();
 			extmapper.insertOrder(order);
-			res.setErrormessage("发布成功");
+			res.setResultRight("发布成功");
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -55,8 +55,8 @@ public class ExtensionService {
 		try {
 			Response res = new Response();
 			List<Order> orderlist = extmapper.getOrderList(order);
-			res.setErrormessage("正确完成");
-			res.setOrderlist(orderlist);
+			res.setResultRight("正确完成");
+			res.setData(orderlist);
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -73,8 +73,8 @@ public class ExtensionService {
 		try {
 			Response res = new Response();
 			Order ordres = extmapper.getOrderDetail(order);
-			res.setErrormessage("正确完成");
-			res.setOrder(ordres);
+			res.setResultRight("正确完成");
+			res.setData(ordres);
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -119,7 +119,7 @@ public class ExtensionService {
 			extmapper.takeOrder(order);
 			// 更新订单接单人数
 			extmapper.updateOrder(order);
-			res.setErrormessage("接单完成，尽快完成订单来获取佣金哦！");
+			res.setResultRight("接单完成，尽快完成订单来获取佣金哦！");
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -188,7 +188,7 @@ public class ExtensionService {
 		Response res = new Response();
 		try {
 			List<Order> orderlist = extmapper.getTakeOrderList(order);
-			res.setOrderlist(orderlist);
+			res.setData(orderlist);
 		}
 		catch(Exception e) {
 			throw new Exception(e);

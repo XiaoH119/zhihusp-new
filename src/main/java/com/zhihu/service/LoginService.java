@@ -18,14 +18,11 @@ public class LoginService {
 			int i = loginMapper.checkUser(lb);
 			Response res = new Response();
 			if (i == 0) {
-				res.setReturncode("0");
-				res.setErrormessage("未查询到登录用户");
+				res.setResultError("未查询到登录用户");
 			} else if (i == 1) {
-				res.setReturncode("1");
-				res.setErrormessage("登录成功");
+				res.setResultRight("登录成功");
 			} else {
-				res.setReturncode("0");
-				res.setErrormessage("登录异常,查询到多个用户");
+				res.setResultError("登录异常,查询到多个用户");
 			}
 			return res;
 		} catch (Exception e) {
@@ -44,14 +41,12 @@ public class LoginService {
 			int i = loginMapper.checkUser(lb);
 			Response res = new Response();
 			if (i > 0) {
-				res.setReturncode("0");
-				res.setErrormessage("该用户名已存在，请更换新用户名！");
+				res.setResultError("该用户名已存在，请更换新用户名！");
 				return res;
 			} else {
 				loginMapper.regUser(lb);
 			}
-			res.setReturncode("1");
-			res.setErrormessage("注册成功！");
+			res.setResultRight("注册成功！");
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -72,8 +67,7 @@ public class LoginService {
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
-		res.setReturncode("1");
-		res.setErrormessage("密码修改成功");
+		res.setResultRight("密码修改成功");
 		return res;
 	}
 
@@ -104,7 +98,7 @@ public class LoginService {
 				res.setResultError("未查询到用户信息！");
 				return res;
 			}
-			res.setUserinfo(userInfo);
+			res.setData(userInfo);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
@@ -121,7 +115,7 @@ public class LoginService {
 			} else {
 				loginMapper.updateUserInfoExt(userInfo);
 			}
-			res.setErrormessage("信息更新完成");
+			res.setResultRight("信息更新完成");
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
@@ -142,7 +136,7 @@ public class LoginService {
 		catch(Exception e) {
 			throw new Exception(e);
 		}
-		res.setErrormessage("更新完成");
+		res.setResultRight("更新完成");
 		return res;
 	}
 	
@@ -156,7 +150,7 @@ public class LoginService {
 		Response res = new Response();
 		try {
 			UserInfo userext = loginMapper.getUserInfoExt(userInfo);
-			res.setUserinfo(userext);
+			res.setData(userext);
 		}
 		catch(Exception e) {
 			throw new Exception(e);
