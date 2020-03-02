@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhihu.mapper.LoginMapper">
+	<!-- 验证登录 -->
+	<select id="checkUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="Integer">
+		select count(1) from userinfo where username=#{username}  and password=#{password} 
+	</select>
+	
+	<!-- 注册 -->
+	<insert id="regUser" parameterType="com.zhihu.common.bean.LoginBean">
+		insert into userinfo
+		(username, password,phone, wechat)
+		values
+		(#{username},#{password},#{phone},#{wechat})
+	</insert>
+	<update id="modifyPassword">
+		update userinfo set password = #{password}
+		where username = #{username}
+	</update>
+	<select id="getUserInfo" parameterType="com.zhihu.common.bean.UserInfo"
+	resultType="com.zhihu.common.bean.UserInfo">
+	SELECT a.userid, a.username, a.phone, a.wechat, a.alipay, a.factname, b.integral
+	FROM userinfo a, Integral b
+	where a.userid = b.userid
+	<if test="userid != null and userid != ''">
+		and a.userid = #{userid}
+	</if>
+	<if test="username != null and username != ''">
+		and a.username = #{username}
+	</if>
+	<if test="password != null and password != ''">
+		and a.`password` = #{password}
+	</if>
+	</select>
+	<select id="getUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo"
+	resultType="com.zhihu.common.bean.UserInfo">
+	SELECT t.zhuye, t.zantong, t.fensi, t.pttype, t.ptid, t.hangye, 
+			a.codemean hangyename, ptname,yanzhi,ptid
+		from userinfo_ext t, coder a
+		where t.userid = #{userid}
+		  and t.pttype = #{pttype}
+		  and 'HANGYE' = a.codename
+		  and t.hangye = a.codevalue
+	</select>
+	<insert id="insertUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
+	INSERT userinfo_ext ( userid, pttype, zhuye, ptid, hangye, fensi, zantong, yanzhi, ptname )
+		VALUES
+			(#{userid},
+		#{pttype},
+		#{zhuye},
+		#{ptid},
+		#{hangye},
+		#{fensi},
+		#{zantong},
+		#{yanzhi},
+		#{ptname})
+	</insert>
+	<update id="updateUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
+	update userinfo_ext t
+		set t.userid = #{userid}
+		<if test="zhuye != null and zhuye != ''">
+			,t.zhuye = #{zhuye}
+		</if>
+		<if test="zantong != null and zantong != ''">
+			,t.zantong = #{zantong}
+		</if>
+		<if test="yanzhi != null and yanzhi != ''">
+			,t.yanzhi = #{yanzhi}
+		</if>
+		<if test="ptname != null and ptname != ''">
+			,t.ptname = #{ptname}
+		</if>
+		<if test="ptid != null and ptid != ''">
+			,t.ptid = #{ptid}
+		</if>
+		<if test="hangye != null and hangye != ''">
+			,t.hangye = #{hangye}
+		</if>
+		<if test="fensi != null and fensi != ''">
+			,t.fensi = #{fensi}
+		</if>
+		where t.userid = #{userid}
+		  and t.pttype = #{pttype}
+	</update>
+	
+	<update id="updateUserInfo" parameterType="com.zhihu.common.bean.UserInfo">
+		UPDATE userinfo t
+			set t.username = t.username
+			<if test="wechat != null and wechat != ''">
+				,t.wechat = #{wechat}
+			</if>
+			<if test="phone != null and phone != ''">
+				,t.phone = #{phone}
+			</if>
+			<if test="alipay != null and alipay != ''">
+			,t.alipay = #{alipay}
+			</if>
+			<if test="factname != null and factname != ''">
+			,t.factname = #{factname}
+			</if>
+			where t.userid = #{userid}
+	</update>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds"
+	debug="false">
+	<!-- <springProperty scope="context" name="logPath" -->
+	<!-- source="log.path" /> -->
+	<!-- <springProperty scope="context" name="serverIp" -->
+	<!-- source="spring.cloud.client.hostname" /> -->
+	<springProperty scope="context" name="serverPort"
+		source="server.port" />
+	<!-- 日志级别 trace<debug<info<warn<error 若定义的日志级别为info，则不会打印出 trace和debug的相关日志。 -->
+
+	<!-- 定义全局参数常量 -->
+	<property name="log.level" value="debug" />
+	<property name="log.maxHistory" value="30" /><!-- 30表示30个 -->
+	<!-- 日志的存放位置 -->
+	<property name="log.filePath" value="d:/ftp" />
+<!-- 	<property name="log.filePath" value="/opt/applogs" /> -->
+	<!-- 日志的展现格式 -->
+	<property name="log.pattern"
+		value="%d{yyyy-MM-dd : HH:mm:ss.SSS}-%logger-[%thread]-%msg%n" />
+
+	<!-- 定义appender (日志的输出和存放位置等). -->
+	<!-- 控制台设置 -->
+	<appender name="consoleAppender"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${log.pattern}</pattern>  <!-- 控制台日志输出格式 -->
+		</encoder>
+	</appender>
+
+	<appender name="FileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender"><!-- 日志文件会滚动 -->
+		<!-- 文件路径 -->
+		<file>${log.filePath}/zhihu_${serverPort}.log</file><!-- 当前的日志文件存放路径 -->
+		<!-- 日志滚动策略 -->
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> <!-- TimeBased默认是一天更新一次 -->
+			<!-- 历史日志文件的存放路径和名称 -->
+			<fileNamePattern>${log.filePath}/error/error.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<!-- 除按日志记录之外，还配置了日志文件不能超过10MB，若超过10MB，日志文件会以索引0开始， 命名日志文件，例如log-debug-1992-11-06.0.log -->
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>200MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 日志文件最大的保存历史 数量 -->
+			<maxHistory>${log.maxHistory}</maxHistory>
+			<!-- 日志文件最大的保存历史 数量 -->
+			<totalSizeCap>500MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>  <!-- 日志文件中日志的格式 -->
+		</encoder>
+		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> -->
+		<!-- <level>ERROR</level> -->
+		<!-- <onMatch>ACCEPT</onMatch> 用过滤器，只接受ERROR级别的日志信息，其余全部过滤掉 -->
+		<!-- <onMismatch>DENY</onMismatch> -->
+		<!-- </filter> -->
+	</appender>
+	<!-- mybatis日志打印 -->
+	<logger name="org.apache.ibatis" level="DEBUG" />
+	<logger name="java.sql" level="DEBUG" />
+	<logger name="org.springframework.jdbc.core" level="DEBUG" />
+	<logger name="com.zhihu.mapper" level="DEBUG" />
+	<!-- 打印查询结果 -->
+	<logger name="com.zhihu.mapper" level="TRACE" />
+	<root level="info">
+		<appender-ref ref="FileAppender" />
+<!-- 		<appender-ref ref="consoleAppender" /> -->
+	</root>
+</configuration>

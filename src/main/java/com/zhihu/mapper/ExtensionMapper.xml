@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhihu.mapper.ExtensionMapper">
+
+	<insert id="insertOrder" parameterType="com.zhihu.common.bean.Order">
+	insert into `order`
+		(orderurl,
+		 ordertitle,
+		 ordertype,
+		 fensi,
+		 price,
+		 needcnt,
+		 hadcnt,
+		 userid,
+		 orderstate
+		)
+		VALUES
+		(#{orderurl},
+		 #{ordertitle},
+		 #{ordertype},
+		 #{fensi},
+		 #{price},
+		 #{needcnt},
+		 #{hadcnt},
+		 #{userid},
+		 #{orderstate})
+	</insert>
+	
+	<select id="getOrderList" parameterType="com.zhihu.common.bean.Order"
+	resultType="com.zhihu.common.bean.Order">
+		SELECT
+		orderid,
+		orderurl,
+		ordertitle,
+		ordertype,
+		fensi,
+		price,
+		needcnt,
+		hadcnt,
+		userid,
+		orderstate 
+	FROM
+		`order` t 
+	WHERE
+		ordertype = #{ordertype}
+		<if test="userid != null and userid != ''">
+		AND t.userid = #{userid}
+		</if>
+		<if test="orderstate = '0'">
+		<![CDATA[
+		and t.needcnt < t.hadcnt
+		]]>
+		</if>
+		<if test="orderstate = '1'">
+		and t.needcnt >= t.hadcnt
+		</if>
+		order by occurdate desc
+	</select>
+	
+	<select id="getOrderDetail" parameterType="com.zhihu.common.bean.Order"
+	resultType="com.zhihu.common.bean.Order">
+	SELECT
+		orderid,
+		orderurl,
+		ordertitle,
+		ordertype,
+		fensi,
+		price,
+		needcnt,
+		hadcnt,
+		userid,
+		orderstate 
+	FROM
+		`order` t 
+	WHERE
+		orderid = #{orderid}
+	</select>
+	<insert id="takeOrder" parameterType="com.zhihu.common.bean.Order">
+		INSERT into ordertake
+		(orderid,userid)
+		values
+		(#{orderid},#{userid})
+	</insert>
+	<update id="updateOrder" parameterType="com.zhihu.common.bean.Order">
+		UPDATE `order` t set t.hadcnt = t.hadcnt + 1
+		where t.orderid = #{orderid}
+	</update>
+	<update id="updateTakeOrder" parameterType="com.zhihu.common.bean.Order">
+		UPDATE ordertake t
+		set t.takestate = #{takestate}
+		<if test="finishdate != null and finishdate != ''">
+			, t.finishdate = #{finishdate}
+		</if>
+		where t.userid = #{userid}
+		  and t.orderid = #{orderid}
+	</update>
+	<select id="getTakeOrder" parameterType="com.zhihu.common.bean.Order"
+	resultType="com.zhihu.common.bean.Order">
+		SELECT userid, orderid, takestate
+		FROM ordertake t
+		where t.userid = #{userid}
+		  and t.orderid = #{orderid}	
+	</select>
+	<update id="updateIntegral" parameterType="java.util.Map">
+		UPDATE integral t set t.integral = t.integral + #{integral}
+		where t.userid = #{userid}
+	</update>
+	<select id="getTakeOrderList" parameterType="com.zhihu.common.bean.Order"
+	resultType="com.zhihu.common.bean.Order">
+		SELECT  a.orderid, a.ordertitle, a.orderurl, a.fensi, a.needcnt, a.hadcnt
+		FROM `order` a, ordertake b
+		where a.orderid = b.orderid
+		  and a.ordertype = #{ordertype}
+		  and b.userid = #{userid}
+		  <if test="takestate = '0'">
+			and b.takestate in ('1','2')
+		  </if>
+		  <if test="takestate = '1'">
+		  	and b.takestate = '3'
+		  </if>
+		  order by b.occurdate desc
+	</select>
+</mapper>
