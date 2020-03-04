@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 public class Order {
 	
+	private int pagenum;
+	
+	private int pagesize;
+	
 	private String finishdate;
 	private String takestate;
 	private String orderid;
@@ -130,6 +134,22 @@ public class Order {
 
 	public void setFinishdate(String finishdate) {
 		this.finishdate = finishdate;
+	}
+
+	public int getPagenum() {
+		return pagenum;
+	}
+
+	public void setPagenum(int pagenum) {
+		this.pagenum = pagenum;
+	}
+
+	public int getPagesize() {
+		return pagesize;
+	}
+
+	public void setPagesize(int pagesize) {
+		this.pagesize = pagesize;
 	}
 
 }

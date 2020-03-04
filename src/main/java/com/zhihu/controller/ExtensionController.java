@@ -50,10 +50,13 @@ public class ExtensionController {
 	 * @param order
 	 * @return
 	 */
-	@RequestMapping(value = "/getorderpage", method = RequestMethod.GET)
-	public Response getOrderPage(@RequestBody Order order) {
+	@RequestMapping(value = "/getorderpage/{pagenum}/{pagesize}", method = RequestMethod.GET)
+	public Response getOrderPage(@RequestBody Order order, @PathVariable("pagenum") Integer pagenum,
+			@PathVariable("pagesize") Integer pagesize) {
 		Response res = new Response();
 		try {
+			order.setPagenum(pagenum);
+			order.setPagesize(pagesize);
 			res = extservice.getOrderPage(order);
 		} catch (Exception e) {
 			logger.error("reg", e);
@@ -84,6 +87,7 @@ public class ExtensionController {
 
 	/**
 	 * 接单
+	 * 
 	 * @param order
 	 * @return
 	 */
@@ -99,40 +103,41 @@ public class ExtensionController {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * 更新接单状态
+	 * 
 	 * @param order
 	 * @return
 	 */
-	@RequestMapping(value="/updatetakeorder", method=RequestMethod.POST)
+	@RequestMapping(value = "/updatetakeorder", method = RequestMethod.POST)
 	public Response updateTakeOrder(@RequestBody Order order) {
 		Response res = new Response();
 		try {
 			res = extservice.updateTakeOrder(order);
-		}
-		catch(Exception e) {
-			logger.error("updatetakeorder",e);
+		} catch (Exception e) {
+			logger.error("updatetakeorder", e);
 			res.setResultError("操作出现异常，请联系管理员或稍后再试");
 			return res;
 		}
 		return res;
 	}
-	
-	@GetMapping(value = "/gettakeorderlist")
-	public Response getTakeOrderList(@RequestBody Order order) {
+
+	@GetMapping(value = "/gettakeorderlist/{pagenum}/{pagesize}")
+	public Response getTakeOrderList(@RequestBody Order order, @PathVariable("pagenum") Integer pagenum,
+			@PathVariable("pagesize") Integer pagesize) {
 		Response res = new Response();
 		try {
+			order.setPagenum(pagenum);
+			order.setPagesize(pagesize);
 			res = extservice.getTakeOrderList(order);
-		}
-		catch(Exception e) {
-			logger.error("getTakeOrderList",e);
+		} catch (Exception e) {
+			logger.error("getTakeOrderList", e);
 			res.setResultError("查询出现异常，请稍后再试");
 			return res;
 		}
 		return res;
 	}
-
 
 	private boolean checkUser(UserInfo userinfo) {
 		boolean result = true;
