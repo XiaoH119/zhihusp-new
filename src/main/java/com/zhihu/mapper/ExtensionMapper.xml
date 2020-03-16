@@ -11,8 +11,11 @@
 		 price,
 		 needcnt,
 		 hadcnt,
-		 userid,
-		 orderstate
+		 userid
+		 <if test="orderstate != null and orderstate != ''">
+		 ,orderstate
+		 </if>
+		 ,hangye
 		)
 		VALUES
 		(#{orderurl},
@@ -22,8 +25,12 @@
 		 #{price},
 		 #{needcnt},
 		 #{hadcnt},
-		 #{userid},
-		 #{orderstate})
+		 #{userid}
+		 <if test="orderstate != null and orderstate != ''">
+		 ,#{orderstate}
+		 </if>
+		 ,#{hangye}
+		 )
 	</insert>
 	
 	<select id="getOrderList" parameterType="com.zhihu.common.bean.Order"

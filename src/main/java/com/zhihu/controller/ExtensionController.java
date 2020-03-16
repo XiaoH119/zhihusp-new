@@ -31,7 +31,7 @@ public class ExtensionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertorder", method = RequestMethod.POST)
-	public Response extension(@RequestBody Order order) {
+	public Response insertOrder(@RequestBody Order order) {
 		Response res = new Response();
 		try {
 			res = extservice.insertOrder(order);

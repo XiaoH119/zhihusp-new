@@ -95,10 +95,12 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
-	public Response getUserInfo(@RequestBody UserInfo userinfo) {
+	public Response getUserInfo(@RequestParam("userid") int userid) {
 		Response res = new Response();
 		try {
-			res = loginService.getUserInfo(userinfo);
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUserid(userid);
+			res = loginService.getUserInfo(userInfo);
 		} catch (Exception e) {
 			res.setResultError("操作异常，请联系客服或稍后再试");
 		}
@@ -107,40 +109,43 @@ public class LoginController {
 
 	/**
 	 * 更新人员基本信息
+	 * 
 	 * @param param
 	 * @return
 	 */
-	@RequestMapping(value="/updateuserinfo", method=RequestMethod.POST)
+	@RequestMapping(value = "/updateuserinfo", method = RequestMethod.POST)
 	public Response updateUserInfo(@RequestBody UserInfo userInfo) {
 		Response res = new Response();
 		try {
 			res = loginService.updateUserInfo(userInfo);
-		}
-		catch(Exception e) {
-			logger.error("updateUserInfo",e);
+		} catch (Exception e) {
+			logger.error("updateUserInfo", e);
 			res.setResultError("更新出现异常，请稍后再试");
 			return res;
 		}
 		return res;
 	}
-	
+
 	/**
 	 * 查询用户扩展信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
-	@RequestMapping(value="/getuserinfoext", method=RequestMethod.GET)
-	public Response getUserInfoExt(@RequestBody UserInfo userInfo) {
+	@RequestMapping(value = "/getuserinfoext", method = RequestMethod.GET)
+	public Response getUserInfoExt(@RequestParam("userid") int userid, @RequestParam("pttype") String pttype) {
 		Response res = new Response();
 		try {
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUserid(userid);
+			userInfo.setPttype(pttype);
 			res = loginService.getUserInfoExt(userInfo);
-		}
-		catch(Exception e) {
-			logger.error("getuserinfoext",e);
+		} catch (Exception e) {
+			logger.error("getuserinfoext", e);
 			res.setResultError("查询用户信息异常，请稍后再试");
 			return res;
 		}
 		return res;
 	}
-	
+
 }

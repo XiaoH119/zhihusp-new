@@ -172,7 +172,7 @@ public class ExtensionService {
 				// 对接单单价和积分进行转换
 				// TODO
 				Map<String, String> m = new HashMap<String, String>();
-				m.put("userid", order.getUserid());
+				m.put("userid", String.valueOf(order.getUserid()));
 				m.put("integral", "5");
 				extmapper.updateIntegral(m);
 			}

@@ -8,6 +8,8 @@ public class Order {
 	
 	private int pagesize;
 	
+	private String hangye;
+	
 	private String finishdate;
 	private String takestate;
 	private String orderid;
@@ -19,7 +21,7 @@ public class Order {
 	private int needcnt;
 	private int hadcnt;
 	private String occurdate;
-	private String userid;
+	private int userid;
 	private String orderstate;
 
 	private String pttype;
@@ -96,11 +98,11 @@ public class Order {
 		this.occurdate = occurdate;
 	}
 
-	public String getUserid() {
+	public int getUserid() {
 		return userid;
 	}
 
-	public void setUserid(String userid) {
+	public void setUserid(int userid) {
 		this.userid = userid;
 	}
 
@@ -150,6 +152,14 @@ public class Order {
 
 	public void setPagesize(int pagesize) {
 		this.pagesize = pagesize;
+	}
+
+	public String getHangye() {
+		return hangye;
+	}
+
+	public void setHangye(String hangye) {
+		this.hangye = hangye;
 	}
 
 }

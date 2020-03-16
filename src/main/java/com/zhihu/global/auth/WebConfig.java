@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 //		registry.addInterceptor(authenticationInterceptor()).excludePathPatterns("/api/user/**").addPathPatterns("/**"); // 拦截所有请求，通过判断是否有
-		registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/api/**"); // 拦截所有请求，通过判断是否有
+		registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/aa/**"); // 拦截所有请求，通过判断是否有
 																												// @LoginRequired
 																															// 注解
 																															// 决定是否需要登录
