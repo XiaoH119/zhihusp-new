@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
 import com.zhihu.global.bean.Response;
+import com.zhihu.global.exception.AppException;
 import com.zhihu.mapper.LoginMapper;
 
 @Service
@@ -18,12 +19,14 @@ public class LoginService {
 			int i = loginMapper.checkUser(lb);
 			Response res = new Response();
 			if (i == 0) {
-				res.setResultError("未查询到登录用户");
+				throw new AppException("-1", "未查询到登录用户");
 			} else if (i == 1) {
 				res.setResultRight("登录成功");
 			} else {
-				res.setResultError("登录异常,查询到多个用户");
+				throw new AppException("-1", "登录异常,查询到多个用户");
 			}
+			LoginBean ll = loginMapper.getUser(lb);
+			res.setData(ll);
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -86,6 +89,7 @@ public class LoginService {
 
 	/**
 	 * 查询用户信息
+	 * 
 	 * @param userinfo
 	 * @return
 	 * @throws Exception
@@ -121,40 +125,44 @@ public class LoginService {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * 更新用户信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 * @throws Exception
 	 */
-	public Response updateUserInfo(UserInfo userInfo) throws Exception{
+	public Response updateUserInfo(UserInfo userInfo) throws Exception {
 		Response res = new Response();
 		try {
 			loginMapper.updateUserInfo(userInfo);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw new Exception(e);
 		}
 		res.setResultRight("更新完成");
 		return res;
 	}
-	
+
 	/**
 	 * 获取用户扩展信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 * @throws Exception
 	 */
-	public Response getUserInfoExt(UserInfo userInfo) throws Exception{
+	public Response getUserInfoExt(UserInfo userInfo) throws Exception {
 		Response res = new Response();
 		try {
 			UserInfo userext = loginMapper.getUserInfoExt(userInfo);
 			res.setData(userext);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw new Exception(e);
 		}
 		return res;
+	}
+
+	public LoginBean findUserById(String userid) throws Exception {
+		return loginMapper.findUserById(userid);
 	}
 }

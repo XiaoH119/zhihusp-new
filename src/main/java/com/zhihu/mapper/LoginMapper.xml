@@ -5,6 +5,13 @@
 	<select id="checkUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="Integer">
 		select count(1) from userinfo where username=#{username}  and password=#{password} 
 	</select>
+	<select id="getUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="com.zhihu.common.bean.LoginBean">
+		select username,userid,password from userinfo where username=#{username}
+	</select>
+	<!-- 验证登录 -->
+	<select id="findUserById" parameterType="String" resultType="com.zhihu.common.bean.LoginBean">
+		select username,userid,password from userinfo where userid=#{userid} 
+	</select>
 	
 	<!-- 注册 -->
 	<insert id="regUser" parameterType="com.zhihu.common.bean.LoginBean">

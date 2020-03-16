@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zhihu.annotation.UserLoginToken;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
 import com.zhihu.global.bean.Response;
 import com.zhihu.service.LoginService;
+import com.zhihu.service.TokenService;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private TokenService tokenService;
 
 	static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -34,6 +39,9 @@ public class LoginController {
 		Response res = new Response();
 		try {
 			res = loginService.login(lb);
+			String token = tokenService.getToken((LoginBean) res.getData());
+			res.setToken(token);
+			res.setData(lb);
 		} catch (Exception e) {
 			logger.error("reg", e);
 			res.setResultError("系统异常，请联系管理员！");
@@ -67,6 +75,7 @@ public class LoginController {
 	 * @param lb
 	 * @return
 	 */
+	@UserLoginToken
 	@RequestMapping(value = "/modifypassword", method = RequestMethod.POST)
 	public Response modifyPassword(@RequestBody LoginBean lb) {
 		Response res = new Response();
