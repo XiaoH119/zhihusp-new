@@ -13,7 +13,7 @@
 	<property name="log.level" value="debug" />
 	<property name="log.maxHistory" value="30" /><!-- 30表示30个 -->
 	<!-- 日志的存放位置 -->
-	<property name="log.filePath" value="d:/ftp" />
+	<property name="log.filePath" value="/applogs" />
 <!-- 	<property name="log.filePath" value="/opt/applogs" /> -->
 	<!-- 日志的展现格式 -->
 	<property name="log.pattern"
