@@ -1,5 +1,7 @@
 package com.zhihu.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.zhihu.annotation.UserLoginToken;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
@@ -77,7 +81,15 @@ public class LoginController {
 	 */
 	@UserLoginToken
 	@RequestMapping(value = "/modifypassword", method = RequestMethod.POST)
-	public Response modifyPassword(@RequestBody LoginBean lb) {
+	public Response modifyPassword(@RequestBody LoginBean lb, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		String userId;
+		try {
+			userId = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		System.out.println(userId);
 		Response res = new Response();
 		try {
 			res = loginService.modifyPassword(lb);
