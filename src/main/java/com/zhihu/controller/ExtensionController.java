@@ -51,10 +51,12 @@ public class ExtensionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getorderpage/{pagenum}/{pagesize}", method = RequestMethod.GET)
-	public Response getOrderPage(@RequestBody Order order, @PathVariable("pagenum") Integer pagenum,
+	public Response getOrderPage(@RequestParam("ordertype") String ordertype, @PathVariable("pagenum") Integer pagenum,
 			@PathVariable("pagesize") Integer pagesize) {
 		Response res = new Response();
 		try {
+			Order order = new Order();
+			order.setOrdertype(ordertype);
 			order.setPagenum(pagenum);
 			order.setPagesize(pagesize);
 			res = extservice.getOrderPage(order);
