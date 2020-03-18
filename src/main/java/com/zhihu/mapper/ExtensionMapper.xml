@@ -11,8 +11,11 @@
 		 price,
 		 needcnt,
 		 hadcnt,
-		 userid,
-		 orderstate
+		 userid
+		 <if test="orderstate != null and orderstate != ''">
+		 ,orderstate
+		 </if>
+		 ,hangye
 		)
 		VALUES
 		(#{orderurl},
@@ -22,8 +25,12 @@
 		 #{price},
 		 #{needcnt},
 		 #{hadcnt},
-		 #{userid},
-		 #{orderstate})
+		 #{userid}
+		 <if test="orderstate != null and orderstate != ''">
+		 ,#{orderstate}
+		 </if>
+		 ,#{hangye}
+		 )
 	</insert>
 	
 	<select id="getOrderList" parameterType="com.zhihu.common.bean.Order"
@@ -46,12 +53,12 @@
 		<if test="userid != null and userid != ''">
 		AND t.userid = #{userid}
 		</if>
-		<if test="orderstate = '0'">
+		<if test="orderstate == '0'.toString()">
 		<![CDATA[
 		and t.needcnt < t.hadcnt
 		]]>
 		</if>
-		<if test="orderstate = '1'">
+		<if test='orderstate == "1"'>
 		and t.needcnt >= t.hadcnt
 		</if>
 		order by occurdate desc
@@ -112,10 +119,10 @@
 		where a.orderid = b.orderid
 		  and a.ordertype = #{ordertype}
 		  and b.userid = #{userid}
-		  <if test="takestate = '0'">
+		  <if test='takestate == "0"'>
 			and b.takestate in ('1','2')
 		  </if>
-		  <if test="takestate = '1'">
+		  <if test='takestate == "1"'>
 		  	and b.takestate = '3'
 		  </if>
 		  order by b.occurdate desc

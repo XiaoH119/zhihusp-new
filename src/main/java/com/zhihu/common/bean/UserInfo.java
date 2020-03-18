@@ -20,7 +20,7 @@ public class UserInfo {
 	/**
 	 * 用户id
 	 */
-	private String userid;
+	private int userid;
 	/**
 	 * 手机号
 	 */
@@ -67,10 +67,10 @@ public class UserInfo {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getUserid() {
+	public int getUserid() {
 		return userid;
 	}
-	public void setUserid(String userid) {
+	public void setUserid(int userid) {
 		this.userid = userid;
 	}
 	public String getPhone() {

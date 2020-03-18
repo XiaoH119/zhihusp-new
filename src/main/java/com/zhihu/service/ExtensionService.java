@@ -7,9 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhihu.common.bean.Order;
 import com.zhihu.common.bean.UserInfo;
 import com.zhihu.common.bo.CommonBo;
+import com.zhihu.common.bo.PageUtils;
 import com.zhihu.global.bean.Constants;
 import com.zhihu.global.bean.Response;
 import com.zhihu.mapper.ExtensionMapper;
@@ -54,9 +57,10 @@ public class ExtensionService {
 	public Response getOrderPage(Order order) throws Exception {
 		try {
 			Response res = new Response();
+			PageHelper.startPage(order.getPagenum(), order.getPagesize());
 			List<Order> orderlist = extmapper.getOrderList(order);
+			res.setData(PageUtils.getPageResult(new PageInfo<>(orderlist)));
 			res.setResultRight("正确完成");
-			res.setData(orderlist);
 			return res;
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -125,14 +129,15 @@ public class ExtensionService {
 			throw new Exception(e);
 		}
 	}
-	
+
 	/**
 	 * 更新接单状态
+	 * 
 	 * @param order
 	 * @return
 	 * @throws Exception
 	 */
-	public Response updateTakeOrder(Order order) throws Exception{
+	public Response updateTakeOrder(Order order) throws Exception {
 		Response res = new Response();
 		try {
 			if (order.getTakestate() == null || order.getTakestate().equals("")) {
@@ -165,32 +170,32 @@ public class ExtensionService {
 			// 接单完成需要更新积分
 			if (order.getTakestate().equals("3")) {
 				// 对接单单价和积分进行转换
-				//TODO
-				Map<String,String> m = new HashMap<String, String>();
-				m.put("userid", order.getUserid());
+				// TODO
+				Map<String, String> m = new HashMap<String, String>();
+				m.put("userid", String.valueOf(order.getUserid()));
 				m.put("integral", "5");
 				extmapper.updateIntegral(m);
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw new Exception(e);
 		}
 		return res;
 	}
-	
+
 	/**
 	 * 查询接单列表
+	 * 
 	 * @param order
 	 * @return
 	 * @throws Exception
 	 */
-	public Response getTakeOrderList(Order order) throws Exception{
+	public Response getTakeOrderList(Order order) throws Exception {
 		Response res = new Response();
 		try {
+			PageHelper.startPage(order.getPagenum(), order.getPagesize());
 			List<Order> orderlist = extmapper.getTakeOrderList(order);
-			res.setData(orderlist);
-		}
-		catch(Exception e) {
+			res.setData(PageUtils.getPageResult(new PageInfo<>(orderlist)));
+		} catch (Exception e) {
 			throw new Exception(e);
 		}
 		return res;

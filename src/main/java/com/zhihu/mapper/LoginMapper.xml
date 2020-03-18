@@ -42,12 +42,10 @@
 	<select id="getUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo"
 	resultType="com.zhihu.common.bean.UserInfo">
 	SELECT t.zhuye, t.zantong, t.fensi, t.pttype, t.ptid, t.hangye, 
-			a.codemean hangyename, ptname,yanzhi,ptid
-		from userinfo_ext t, coder a
+			ptname,yanzhi,ptid
+		from userinfo_ext t
 		where t.userid = #{userid}
 		  and t.pttype = #{pttype}
-		  and 'HANGYE' = a.codename
-		  and t.hangye = a.codevalue
 	</select>
 	<insert id="insertUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
 	INSERT userinfo_ext ( userid, pttype, zhuye, ptid, hangye, fensi, zantong, yanzhi, ptname )

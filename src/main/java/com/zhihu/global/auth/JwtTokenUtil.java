@@ -14,8 +14,8 @@ public class JwtTokenUtil {
 	public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
  
-    private static final String SECRET = "jwtsecretdemo";
-    private static final String ISS = "leopard";
+    private static final String SECRET = "jwtsecretforzhituitui";
+    private static final String ISS = "zhituitui";
     
     // 过期时间是3600秒，既是1个小时
     public static final long EXPIRATION = 3600L;

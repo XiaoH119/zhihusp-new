@@ -23,16 +23,16 @@ public class AdminUserController extends BaseController {
 	 * @param name
 	 * @return
 	 */
-	
+
 	@RequestMapping(value = "/adminLogin", method = RequestMethod.POST)
 	public Message adminLogin(HttpServletResponse response, String userName, String password) {
 		// 此次简单处理，直接用登录名查找对象，不验证密码
 		UserInfo user = loginService.getUserInfo(userName, password);
 		if (user == null) {
-			return new Message("-1","未查询到用户信息");
+			return new Message("-1", "未查询到用户信息");
 		}
 
-		String token = JwtTokenUtil.createToken(user.getUserid(), user.getUsername(), false);
+		String token = JwtTokenUtil.createToken(String.valueOf(user.getUserid()), user.getUsername(), false);
 		// 放到响应头部
 		response.setHeader(JwtTokenUtil.TOKEN_HEADER, JwtTokenUtil.TOKEN_PREFIX + token);
 		return new Message("0", "登录成功");

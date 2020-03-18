@@ -102,9 +102,17 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/updateuserinfoext", method = RequestMethod.POST)
-	public Response updateUserInfoExt(@RequestBody UserInfo userInfo) {
+	public Response updateUserInfoExt(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
 		Response res = new Response();
 		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userInfo.setUserid(Integer.parseInt(userid));
 			res = loginService.updateUserInfoExt(userInfo);
 		} catch (Exception e) {
 			logger.error("updateUserInfoExt", e);
@@ -116,10 +124,19 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
-	public Response getUserInfo(@RequestBody UserInfo userinfo) {
+	public Response getUserInfo(HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
 		Response res = new Response();
 		try {
-			res = loginService.getUserInfo(userinfo);
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUserid(Integer.parseInt(userid));
+			res = loginService.getUserInfo(userInfo);
 		} catch (Exception e) {
 			res.setResultError("操作异常，请联系客服或稍后再试");
 		}
@@ -133,9 +150,17 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/updateuserinfo", method = RequestMethod.POST)
-	public Response updateUserInfo(@RequestBody UserInfo userInfo) {
+	public Response updateUserInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
 		Response res = new Response();
 		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userInfo.setUserid(Integer.parseInt(userid));
 			res = loginService.updateUserInfo(userInfo);
 		} catch (Exception e) {
 			logger.error("updateUserInfo", e);
@@ -152,9 +177,19 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getuserinfoext", method = RequestMethod.GET)
-	public Response getUserInfoExt(@RequestBody UserInfo userInfo) {
+	public Response getUserInfoExt(@RequestParam("pttype") String pttype, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
 		Response res = new Response();
 		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUserid(Integer.parseInt(userid));
+			userInfo.setPttype(pttype);
 			res = loginService.getUserInfoExt(userInfo);
 		} catch (Exception e) {
 			logger.error("getuserinfoext", e);
