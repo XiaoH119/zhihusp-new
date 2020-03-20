@@ -67,6 +67,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 } catch (JWTVerificationException e) {
                     throw new RuntimeException("401");
                 }
+                httpServletRequest.setAttribute("userid", userId);
                 return true;
             }
         }
