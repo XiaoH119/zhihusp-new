@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.google.gson.Gson;
+import com.zhihu.annotation.PassToken;
 import com.zhihu.annotation.UserLoginToken;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.SendSMS;
@@ -113,20 +114,16 @@ public class LoginController {
 	 * 
 	 * @param lb
 	 * @return
+	 * @throws Exception
 	 */
-	@UserLoginToken
+//	@UserLoginToken
+	@PassToken
 	@RequestMapping(value = "/modifypassword", method = RequestMethod.POST)
-	public Response modifyPassword(@RequestBody LoginBean lb) {
+	public Response modifyPassword(@RequestBody LoginBean lb) throws Exception {
 		String userId = (String) request.getAttribute("userid");
 		System.out.println(userId);
 		Response res = new Response();
-		try {
-			res = loginService.modifyPassword(lb);
-		} catch (Exception e) {
-			logger.error("modifyPassword", e);
-			res.setResultError("系统异常，请联系管理员！");
-			return res;
-		}
+		res = loginService.modifyPassword(lb);
 		return res;
 	}
 

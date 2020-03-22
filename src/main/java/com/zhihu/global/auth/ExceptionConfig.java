@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局异常拦截
  */
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ExceptionConfig {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExceptionConfig.class);
