@@ -3,6 +3,7 @@ package com.zhihu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zhihu.common.bean.Integral;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
 import com.zhihu.global.bean.Response;
@@ -164,5 +165,32 @@ public class LoginService {
 
 	public LoginBean findUserById(String userid) throws Exception {
 		return loginMapper.findUserById(userid);
+	}
+
+	/**
+	 * 积分兑换现金
+	 * 
+	 * @param integral
+	 * @return
+	 * @throws Exception
+	 */
+	public Response exchange(Integral integral) throws Exception {
+		Response res = new Response();
+		try {
+			// 添加兑换记录，更新积分信息
+			loginMapper.insertIntegralLog(integral);
+//			String s = null;
+//			if (s.equals("1")) {
+//				s = "";
+//			}
+//			UserInfo userInfo = new UserInfo();
+//			userInfo.setUserid(Integer.parseInt(integral.getUserid()));
+			integral.setIntegral(integral.getIntegral() * -1);
+			loginMapper.updateIntegral(integral);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+		res.setResultRight("更新完成");
+		return res;
 	}
 }

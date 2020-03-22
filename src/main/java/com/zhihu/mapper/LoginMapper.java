@@ -2,6 +2,7 @@ package com.zhihu.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.zhihu.common.bean.Integral;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
 
@@ -10,7 +11,7 @@ public interface LoginMapper {
 	int checkUser(LoginBean lb);
 
 	void regUser(LoginBean lb);
-
+	
 	void modifyPassword(LoginBean lb);
 
 	LoginBean findUserById(String userid);
@@ -53,4 +54,16 @@ public interface LoginMapper {
 	 * @param userInfo
 	 */
 	void updateUserInfo(UserInfo userInfo);
+	
+	/**
+	 * 更新积分
+	 * @param integral
+	 */
+	void updateIntegral(Integral integral);
+	
+	/**
+	 * 积分兑换现金
+	 * @param integral
+	 */
+	void insertIntegralLog(Integral integral);
 }

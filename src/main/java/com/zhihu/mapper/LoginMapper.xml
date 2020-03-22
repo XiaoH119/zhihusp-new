@@ -3,10 +3,16 @@
 <mapper namespace="com.zhihu.mapper.LoginMapper">
 	<!-- 验证登录 -->
 	<select id="checkUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="Integer">
-		select count(1) from userinfo where username=#{username}  and password=#{password} 
+		select count(1) from userinfo where password=#{password} 
+		<if test="username != null and username != ''">
+			and (username=#{username} or phone=#{username})
+		</if>
+		<if test="phone != null and phone != ''">
+			and phone=#{phone}
+		</if>
 	</select>
 	<select id="getUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="com.zhihu.common.bean.LoginBean">
-		select username,userid,password from userinfo where username=#{username}
+		select username,userid,password from userinfo where username=#{username} or phone=#{username}
 	</select>
 	<!-- 验证登录 -->
 	<select id="findUserById" parameterType="String" resultType="com.zhihu.common.bean.LoginBean">
@@ -26,9 +32,9 @@
 	</update>
 	<select id="getUserInfo" parameterType="com.zhihu.common.bean.UserInfo"
 	resultType="com.zhihu.common.bean.UserInfo">
-	SELECT a.userid, a.username, a.phone, a.wechat, a.alipay, a.factname, b.integral
-	FROM userinfo a, Integral b
-	where a.userid = b.userid
+	SELECT a.userid, a.username, a.phone, a.wechat, a.alipay, a.factname, a.integral
+	FROM userinfo a
+	where a.userid = a.userid
 	<if test="userid != null and userid != ''">
 		and a.userid = #{userid}
 	</if>
@@ -62,7 +68,7 @@
 	</insert>
 	<update id="updateUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
 	update userinfo_ext t
-		set t.userid = #{userid}
+		set t.userid = t.userid
 		<if test="zhuye != null and zhuye != ''">
 			,t.zhuye = #{zhuye}
 		</if>
@@ -105,4 +111,14 @@
 			</if>
 			where t.userid = #{userid}
 	</update>
+	<update id="updateIntegral" parameterType="com.zhihu.common.bean.Integral">
+		UPDATE userinfo t set t.integral = t.integral + #{integral}
+		where t.userid = #{userid}
+	</update>
+	<insert id="insertIntegralLog" parameterType="com.zhihu.common.bean.Integral">
+		INSERT into integrallog
+		(userid,integral,integraltype,money,alipay,factname)
+		VALUES
+		(#{userid},#{integral},#{integraltype},#{money},#{alipay},#{factname})
+	</insert>
 </mapper>

@@ -57,6 +57,7 @@ public class UserInfo {
 	 * 盐值
 	 */
 	private int yanzhi;
+	
 	/**
 	 * 平台昵称
 	 */

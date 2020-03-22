@@ -53,13 +53,13 @@
 		<if test="userid != null and userid != ''">
 		AND t.userid = #{userid}
 		</if>
-		<if test="orderstate == '0'.toString()">
+		<if test='orderstate == "0"'>
 		<![CDATA[
-		and t.needcnt < t.hadcnt
+		and t.needcnt > t.hadcnt
 		]]>
 		</if>
 		<if test='orderstate == "1"'>
-		and t.needcnt >= t.hadcnt
+		and t.needcnt = t.hadcnt
 		</if>
 		order by occurdate desc
 	</select>

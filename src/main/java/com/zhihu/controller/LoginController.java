@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.zhihu.annotation.UserLoginToken;
+import com.zhihu.common.bean.Integral;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.UserInfo;
 import com.zhihu.global.bean.Response;
 import com.zhihu.service.LoginService;
 import com.zhihu.service.TokenService;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 //@RequestMapping("/user")
@@ -93,6 +93,14 @@ public class LoginController {
 		return res;
 	}
 
+	/**
+	 * 更新用户扩展信息
+	 * 
+	 * @param userInfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
 	@RequestMapping(value = "/updateuserinfoext", method = RequestMethod.POST)
 	public Response updateUserInfoExt(@RequestBody UserInfo userInfo, HttpServletRequest request) {
 		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
@@ -115,6 +123,13 @@ public class LoginController {
 		return res;
 	}
 
+	/**
+	 * 获取用户信息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
 	@RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
 	public Response getUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
@@ -141,8 +156,11 @@ public class LoginController {
 	 * @param param
 	 * @return
 	 */
+	@UserLoginToken
 	@RequestMapping(value = "/updateuserinfo", method = RequestMethod.POST)
 	public Response updateUserInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+		logger.info("updateUserInfo");
+		logger.info("userInfo===" + userInfo);
 		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
 		String userid = "";
 		Response res = new Response();
@@ -168,6 +186,7 @@ public class LoginController {
 	 * @param userInfo
 	 * @return
 	 */
+	@UserLoginToken
 	@RequestMapping(value = "/getuserinfoext", method = RequestMethod.GET)
 	public Response getUserInfoExt(@RequestParam("pttype") String pttype, HttpServletRequest request) {
 		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
@@ -191,4 +210,25 @@ public class LoginController {
 		return res;
 	}
 
+	@UserLoginToken
+	@PostMapping("/exchange")
+	public Response exchange(@RequestBody Integral integral, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			integral.setUserid(userid);
+			res = loginService.exchange(integral);
+		} catch (Exception e) {
+			logger.error("exchange", e);
+			res.setResultError("兑换积分异常，请稍后再试");
+			return res;
+		}
+		return res;
+	}
 }

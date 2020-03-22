@@ -108,6 +108,11 @@ public class ExtensionService {
 				res.setResultError("未查询到订单信息");
 				return res;
 			}
+			
+			if (order.getUserid() == orderdb.getUserid()) {
+				res.setResultError("本人不能接自己推广的订单");
+				return res;
+			}
 
 			if (orderdb.getNeedcnt() == orderdb.getHadcnt()) {
 				res.setResultError("接单人数已满，请选择其他订单");

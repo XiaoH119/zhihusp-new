@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.JsonAdapter;
 import com.zhihu.common.bean.LoginBean;
 import com.zhihu.common.bean.Order;
 import com.zhihu.common.bean.UserInfo;
@@ -89,7 +92,7 @@ public class ExtensionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getorderdetail", method = RequestMethod.GET)
-	public Response requestMethodName(@RequestParam String orderid) {
+	public Response getorderdetail(@RequestParam String orderid) {
 		Response res = new Response();
 		try {
 			Order order = new Order();
@@ -166,7 +169,7 @@ public class ExtensionController {
 	 * @return
 	 */
 	@GetMapping(value = "/gettakeorderlist/{pagenum}/{pagesize}")
-	public Response getTakeOrderList(@RequestParam String ordertype, @PathVariable("pagenum") Integer pagenum,
+	public Response getTakeOrderList(@RequestParam String ordertype,@RequestParam String takestate, @PathVariable("pagenum") Integer pagenum,
 			@PathVariable("pagesize") Integer pagesize, HttpServletRequest request) {
 		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
 		String userid = "";
@@ -179,6 +182,7 @@ public class ExtensionController {
 		try {
 			Order order = new Order();
 			order.setOrdertype(ordertype);
+			order.setTakestate(takestate);
 			order.setUserid(Integer.parseInt(userid));
 			order.setPagenum(pagenum);
 			order.setPagesize(pagesize);
@@ -191,9 +195,37 @@ public class ExtensionController {
 		return res;
 	}
 
-	private boolean checkUser(UserInfo userinfo) {
-		boolean result = true;
-
-		return result;
+	/**
+	 * 查询我推广的订单
+	 * @param ordertype
+	 * @param pagenum
+	 * @param pagesize
+	 * @return
+	 */
+	@RequestMapping(value = "/getorderlist/{pagenum}/{pagesize}", method = RequestMethod.GET)
+	public Response getOrderList(@RequestParam("ordertype") String ordertype,@RequestParam("orderstate") String orderstate, @PathVariable("pagenum") Integer pagenum,
+			@PathVariable("pagesize") Integer pagesize,HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			Order order = new Order();
+			order.setUserid(Integer.parseInt(userid));
+			order.setOrdertype(ordertype);
+			order.setOrderstate(orderstate);
+			order.setPagenum(pagenum);
+			order.setPagesize(pagesize);
+			res = extservice.getOrderPage(order);
+		} catch (Exception e) {
+			logger.error("reg", e);
+			res.setResultError("系统异常，请联系管理员！");
+			return res;
+		}
+		return res;
 	}
 }
