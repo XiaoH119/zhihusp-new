@@ -4,7 +4,7 @@ public class Response {
 	private String code;// 返回代码(0正确完成,-1错误),
 	private String message;// 错误信息
 	private String token;// 错误信息
-
+	
 	private Object data;
 
 	public Response() {
@@ -52,6 +52,10 @@ public class Response {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	public boolean isError() {
+		return "-1".equals(this.code);
 	}
 
 }

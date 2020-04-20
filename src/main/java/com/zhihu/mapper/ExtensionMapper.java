@@ -68,4 +68,24 @@ public interface ExtensionMapper {
 	 */
 	List<Order> getTakeOrderList(Order order);
 	
+	/**
+	 * 获取订单接单列表
+	 * @param order
+	 * @return
+	 */
+	List<Order> getOrderListForJD(Order order);
+	
+	/**
+	 * 查询反对权限
+	 * @param userid
+	 * @return
+	 */
+	int getOpponsePermit(String userid);
+	
+	/**
+	 * 查询发单权限
+	 * @param userid
+	 * @return
+	 */
+	int getExtPermit(String userid);
 }

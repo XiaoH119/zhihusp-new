@@ -2,72 +2,93 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhihu.mapper.LoginMapper">
 	<!-- 验证登录 -->
-	<select id="checkUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="Integer">
-		select count(1) from userinfo where password=#{password} 
+	<select id="checkUser"
+		parameterType="com.zhihu.common.bean.LoginBean" resultType="Integer">
+		select count(1) from userinfo where password=#{password}
 		<if test="username != null and username != ''">
-			and (username=#{username} or phone=#{username})
-		</if>
-		<if test="phone != null and phone != ''">
-			and phone=#{phone}
+			and username=#{username}
 		</if>
 	</select>
-	<select id="getUser" parameterType="com.zhihu.common.bean.LoginBean" resultType="com.zhihu.common.bean.LoginBean">
-		select username,userid,password from userinfo where username=#{username} or phone=#{username}
+	<select id="getUser"
+		parameterType="com.zhihu.common.bean.LoginBean"
+		resultType="com.zhihu.common.bean.LoginBean">
+		select username,userid,password,integral from userinfo where
+		username=#{username}
 	</select>
 	<!-- 验证登录 -->
-	<select id="findUserById" parameterType="String" resultType="com.zhihu.common.bean.LoginBean">
-		select username,userid,password from userinfo where userid=#{userid} 
+	<select id="findUserById" parameterType="String"
+		resultType="com.zhihu.common.bean.LoginBean">
+		select username,userid,password from userinfo where
+		userid=#{userid}
 	</select>
-	
+
 	<!-- 注册 -->
-	<insert id="regUser" parameterType="com.zhihu.common.bean.LoginBean">
+	<insert id="regUser"
+		parameterType="com.zhihu.common.bean.LoginBean">
 		insert into userinfo
-		(username, password,phone, wechat)
+		(username, password, wechat,integral)
 		values
-		(#{username},#{password},#{phone},#{wechat})
+		(#{username},#{password},#{wechat},#{integral})
 	</insert>
 	<update id="modifyPassword">
 		update userinfo set password = #{password}
-		where username = #{username}
+		where
+		username = #{username}
 	</update>
-	<select id="getUserInfo" parameterType="com.zhihu.common.bean.UserInfo"
-	resultType="com.zhihu.common.bean.UserInfo">
-	SELECT a.userid, a.username, a.phone, a.wechat, a.alipay, a.factname, a.integral
-	FROM userinfo a
-	where a.userid = a.userid
-	<if test="userid != null and userid != ''">
-		and a.userid = #{userid}
-	</if>
-	<if test="username != null and username != ''">
-		and a.username = #{username}
-	</if>
-	<if test="password != null and password != ''">
-		and a.`password` = #{password}
-	</if>
+	<select id="getUserInfo"
+		parameterType="com.zhihu.common.bean.UserInfo"
+		resultType="com.zhihu.common.bean.UserInfo">
+		SELECT a.userid, a.username, a.wechat, a.alipay, a.factname,
+		a.integral,IFNULL(a.isadmin,'0') isadmin
+		FROM userinfo a
+		where a.userid = a.userid
+		<if test="userid != null and userid != ''">
+			and a.userid = #{userid}
+		</if>
+		<if test="username != null and username != ''">
+			and a.username = #{username}
+		</if>
+		<if test="password != null and password != ''">
+			and a.`password` = #{password}
+		</if>
 	</select>
-	<select id="getUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo"
-	resultType="com.zhihu.common.bean.UserInfo">
-	SELECT t.zhuye, t.zantong, t.fensi, t.pttype, t.ptid, t.hangye, 
-			ptname,yanzhi,ptid
+	<select id="getUserInfoExt"
+		parameterType="com.zhihu.common.bean.UserInfo"
+		resultType="com.zhihu.common.bean.UserInfo">
+		SELECT t.zhuye, t.zantong, t.fensi, t.pttype, t.ptid, t.hangye,
+		ptname,yanzhi,ptid
 		from userinfo_ext t
 		where t.userid = #{userid}
-		  and t.pttype = #{pttype}
+		and t.pttype = #{pttype}
 	</select>
-	<insert id="insertUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
-	INSERT userinfo_ext ( userid, pttype, zhuye, ptid, hangye, fensi, zantong, yanzhi, ptname )
+	<insert id="insertUserInfoExt"
+		parameterType="com.zhihu.common.bean.UserInfo">
+		INSERT userinfo_ext ( userid, pttype, zhuye, ptid, hangye, fensi,
+		<if test="zantong != null and zantong != ''">
+			zantong,
+		</if>
+		<if test="yanzhi != null and yanzhi != ''">
+			yanzhi,
+		</if>
+		ptname )
 		VALUES
-			(#{userid},
+		(#{userid},
 		#{pttype},
 		#{zhuye},
 		#{ptid},
 		#{hangye},
 		#{fensi},
-		#{zantong},
-		#{yanzhi},
+		<if test="zantong != null and zantong != ''">
+			#{zantong},
+		</if>
+		<if test="yanzhi != null and yanzhi != ''">
+			#{yanzhi},
+		</if>
 		#{ptname})
 	</insert>
-	<update id="updateUserInfoExt" parameterType="com.zhihu.common.bean.UserInfo">
-	update userinfo_ext t
+	<update id="updateUserInfoExt"
+		parameterType="com.zhihu.common.bean.UserInfo">
+		update userinfo_ext t
 		set t.userid = t.userid
 		<if test="zhuye != null and zhuye != ''">
 			,t.zhuye = #{zhuye}
@@ -91,34 +112,86 @@
 			,t.fensi = #{fensi}
 		</if>
 		where t.userid = #{userid}
-		  and t.pttype = #{pttype}
+		and t.pttype = #{pttype}
 	</update>
-	
-	<update id="updateUserInfo" parameterType="com.zhihu.common.bean.UserInfo">
+
+	<update id="updateUserInfo"
+		parameterType="com.zhihu.common.bean.UserInfo">
 		UPDATE userinfo t
-			set t.username = t.username
-			<if test="wechat != null and wechat != ''">
-				,t.wechat = #{wechat}
-			</if>
-			<if test="phone != null and phone != ''">
-				,t.phone = #{phone}
-			</if>
-			<if test="alipay != null and alipay != ''">
+		set t.username = t.username
+		<if test="wechat != null and wechat != ''">
+			,t.wechat = #{wechat}
+		</if>
+		<if test="alipay != null and alipay != ''">
 			,t.alipay = #{alipay}
-			</if>
-			<if test="factname != null and factname != ''">
+		</if>
+		<if test="factname != null and factname != ''">
 			,t.factname = #{factname}
-			</if>
-			where t.userid = #{userid}
-	</update>
-	<update id="updateIntegral" parameterType="com.zhihu.common.bean.Integral">
-		UPDATE userinfo t set t.integral = t.integral + #{integral}
+		</if>
 		where t.userid = #{userid}
 	</update>
-	<insert id="insertIntegralLog" parameterType="com.zhihu.common.bean.Integral">
+	<update id="updateIntegral"
+		parameterType="com.zhihu.common.bean.Integral">
+		UPDATE userinfo t set t.integral = t.integral +
+		#{integral}
+		where t.userid = #{userid}
+	</update>
+	<insert id="insertIntegralLog"
+		parameterType="com.zhihu.common.bean.Integral">
 		INSERT into integrallog
 		(userid,integral,integraltype,money,alipay,factname)
 		VALUES
 		(#{userid},#{integral},#{integraltype},#{money},#{alipay},#{factname})
 	</insert>
+	<select id="selectUserInfoExtByPTID"
+		parameterType="java.lang.String" resultType="java.lang.String">
+		select userid
+		from userinfo_ext t
+		where t.ptid = #{ptid}
+	</select>
+	<insert id="insertTakeUser" parameterType="com.zhihu.common.bean.UserInfo">
+		insert into takeuser
+		(userid)
+		values
+		(#{userid})
+	</insert>
+	<delete id="deleteTakeUser" parameterType="com.zhihu.common.bean.UserInfo">
+		delete from takeuser where userid = #{userid}
+	</delete>
+	<select id="selectTakeUser" parameterType="com.zhihu.common.bean.UserInfo"
+	resultType="java.lang.Integer">
+		select count(*) cnt from takeuser where userid = #{userid}	
+	</select>
+	<select id="isExistExtUser" parameterType="java.lang.String"
+	resultType="java.lang.Integer">
+		select count(userid) cnt from extuser t where t.userid = #{userid} 	
+	</select>
+	<insert id="insertExtUser" parameterType="java.lang.String">
+		insert into extuser
+		(userid)
+		values
+		(
+		#{userid}
+		)
+	</insert>
+	<delete id="deleteExtUser"  parameterType="java.lang.String">
+		delete from extuser
+		where userid = #{userid}
+	</delete>
+	<select id="isExistOpposeUser" parameterType="java.lang.String"
+	resultType="java.lang.Integer">
+		select count(userid) cnt from opposeuser t where t.userid = #{userid} 	
+	</select>
+	<insert id="insertOpposeUser" parameterType="java.lang.String">
+		insert into opposeuser
+		(userid)
+		values
+		(
+		#{userid}
+		)
+	</insert>
+	<delete id="deleteOpposeUser"  parameterType="java.lang.String">
+		delete from opposeuser
+		where userid = #{userid}
+	</delete>
 </mapper>

@@ -8,8 +8,10 @@ public class Order {
 	
 	private int pagesize;
 	
-	private String hangye;
+	private String checktype;
 	
+	private String hangye;
+	private String orderuserid;
 	private String finishdate;
 	private String takestate;
 	private String orderid;
@@ -160,6 +162,22 @@ public class Order {
 
 	public void setHangye(String hangye) {
 		this.hangye = hangye;
+	}
+
+	public String getOrderuserid() {
+		return orderuserid;
+	}
+
+	public void setOrderuserid(String orderuserid) {
+		this.orderuserid = orderuserid;
+	}
+
+	public String getChecktype() {
+		return checktype;
+	}
+
+	public void setChecktype(String checktype) {
+		this.checktype = checktype;
 	}
 
 }

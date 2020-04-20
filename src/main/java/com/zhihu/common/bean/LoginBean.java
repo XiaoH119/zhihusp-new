@@ -6,6 +6,7 @@ public class LoginBean {
 	private String phone;
 	private String wechat;
 	private String userid;
+	private String integral;
 
 	public String getUsername() {
 		return username;
@@ -45,6 +46,14 @@ public class LoginBean {
 
 	public void setUserid(String userid) {
 		this.userid = userid;
+	}
+
+	public String getIntegral() {
+		return integral;
+	}
+
+	public void setIntegral(String integral) {
+		this.integral = integral;
 	}
 
 }

@@ -53,12 +53,15 @@ public class LoginController {
 		Response res = new Response();
 		try {
 			res = loginService.login(lb);
+			if (res.isError()) {
+				return res;
+			}
 			String token = tokenService.getToken((LoginBean) res.getData());
 			res.setToken(token);
 			res.setData(lb);
 		} catch (Exception e) {
 			logger.error("reg", e);
-			res.setResultError("系统异常，请联系管理员！");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 		return res;
@@ -103,7 +106,7 @@ public class LoginController {
 			res = loginService.reg(lb);
 		} catch (Exception e) {
 			logger.error("reg", e);
-			res.setResultError("系统异常，请联系管理员！");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 		return res;
@@ -150,7 +153,7 @@ public class LoginController {
 			res = loginService.updateUserInfoExt(userInfo);
 		} catch (Exception e) {
 			logger.error("updateUserInfoExt", e);
-			res.setResultError("系统异常，请联系管理员！");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 
@@ -179,7 +182,7 @@ public class LoginController {
 			userInfo.setUserid(Integer.parseInt(userid));
 			res = loginService.getUserInfo(userInfo);
 		} catch (Exception e) {
-			res.setResultError("操作异常，请联系客服或稍后再试");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 		}
 		return res;
 	}
@@ -208,7 +211,7 @@ public class LoginController {
 			res = loginService.updateUserInfo(userInfo);
 		} catch (Exception e) {
 			logger.error("updateUserInfo", e);
-			res.setResultError("更新出现异常，请稍后再试");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 		return res;
@@ -238,7 +241,7 @@ public class LoginController {
 			res = loginService.getUserInfoExt(userInfo);
 		} catch (Exception e) {
 			logger.error("getuserinfoext", e);
-			res.setResultError("查询用户信息异常，请稍后再试");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 		return res;
@@ -260,7 +263,149 @@ public class LoginController {
 			res = loginService.exchange(integral);
 		} catch (Exception e) {
 			logger.error("exchange", e);
-			res.setResultError("兑换积分异常，请稍后再试");
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
+			return res;
+		}
+		return res;
+	}
+	
+	/**
+	 * 开通放单权限
+	 * @param userinfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
+	@PostMapping("/grantextpermit")
+	public Response grantExtPermit(@RequestBody UserInfo userinfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userinfo.setUserid(Integer.parseInt(userid));
+			res = loginService.grantExtPermit(userinfo);
+		} catch (Exception e) {
+			logger.error("grantExtPermit", e);
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
+			return res;
+		}
+		return res;
+	}
+	
+	/**
+	 * 开通接反对单权限
+	 * @param userinfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
+	@PostMapping("/grantopposepermit")
+	public Response grantOpposePermit(@RequestBody UserInfo userinfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userinfo.setUserid(Integer.parseInt(userid));
+			res = loginService.grantOpposePermit(userinfo);
+		} catch (Exception e) {
+			logger.error("grantOpposePermit", e);
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
+			return res;
+		}
+		return res;
+	}
+	
+	/**
+	 * 充值
+	 * @param userinfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
+	@PostMapping("/updateintegral")
+	public Response updateIntegral(@RequestBody UserInfo userinfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userinfo.setUserid(Integer.parseInt(userid));
+			res = loginService.updateIntegral(userinfo);
+		} catch (Exception e) {
+			logger.error("grantOpposePermit", e);
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
+			return res;
+		}
+		return res;
+	}
+	
+	/**
+	 * 查询积分及余额
+	 * @param userinfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
+	@GetMapping("/getintegral")
+	public Response getIntegral(@RequestParam String username, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			UserInfo userinfo = new UserInfo();
+			userinfo.setUserid(Integer.parseInt(userid));
+			userinfo.setUsername(username);
+			res = loginService.getIntegral(userinfo);
+		} catch (Exception e) {
+			logger.error("grantOpposePermit", e);
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
+			return res;
+		}
+		return res;
+	}
+	
+	/**
+	 * 开通接单权限
+	 * @param userinfo
+	 * @param request
+	 * @return
+	 */
+	@UserLoginToken
+	@PostMapping("/granttakepermit")
+	public Response grantTakePermit(@RequestBody UserInfo userinfo, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
+		String userid = "";
+		Response res = new Response();
+		try {
+			userid = JWT.decode(token).getAudience().get(0);
+		} catch (JWTDecodeException j) {
+			throw new RuntimeException("401");
+		}
+		try {
+			userinfo.setUserid(Integer.parseInt(userid));
+			res = loginService.grantTakePermit(userinfo);
+		} catch (Exception e) {
+			logger.error("grantOpposePermit", e);
+			res.setResultError("小智开小差了，请您重新登一下再试吧");
 			return res;
 		}
 		return res;

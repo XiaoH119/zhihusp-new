@@ -1,9 +1,11 @@
 package com.zhihu.common.bean;
 
+import java.math.BigDecimal;
+
 public class Integral {
 
 	private String userid;
-	private int integral;
+	private BigDecimal integral;
 	private String integraltype;
 	private String money;
 	private String occurdate;
@@ -18,11 +20,11 @@ public class Integral {
 		this.userid = userid;
 	}
 
-	public int getIntegral() {
+	public BigDecimal getIntegral() {
 		return integral;
 	}
 
-	public void setIntegral(int integral) {
+	public void setIntegral(BigDecimal integral) {
 		this.integral = integral;
 	}
 

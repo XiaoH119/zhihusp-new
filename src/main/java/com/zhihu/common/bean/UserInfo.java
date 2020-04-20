@@ -1,5 +1,7 @@
 package com.zhihu.common.bean;
 
+import java.math.BigDecimal;
+
 public class UserInfo {
 
 	/**
@@ -15,7 +17,7 @@ public class UserInfo {
 	
 	private String factname;
 	
-	private int integral;
+	private BigDecimal integral;
 	
 	/**
 	 * 用户id
@@ -52,11 +54,16 @@ public class UserInfo {
 	/**
 	 * 赞同数
 	 */
-	private int zantong;
+	private String zantong;
 	/**
 	 * 盐值
 	 */
-	private int yanzhi;
+	private String yanzhi;
+	
+	/**
+	 * 是否管理员
+	 */
+	private String isadmin;
 	
 	/**
 	 * 平台昵称
@@ -116,16 +123,16 @@ public class UserInfo {
 	public void setFensi(int fensi) {
 		this.fensi = fensi;
 	}
-	public int getZantong() {
+	public String getZantong() {
 		return zantong;
 	}
-	public void setZantong(int zantong) {
+	public void setZantong(String zantong) {
 		this.zantong = zantong;
 	}
-	public int getYanzhi() {
+	public String getYanzhi() {
 		return yanzhi;
 	}
-	public void setYanzhi(int yanzhi) {
+	public void setYanzhi(String yanzhi) {
 		this.yanzhi = yanzhi;
 	}
 	public String getPtname() {
@@ -152,10 +159,10 @@ public class UserInfo {
 	public void setFactname(String factname) {
 		this.factname = factname;
 	}
-	public int getIntegral() {
+	public BigDecimal getIntegral() {
 		return integral;
 	}
-	public void setIntegral(int integral) {
+	public void setIntegral(BigDecimal integral) {
 		this.integral = integral;
 	}
 	public String getHangyename() {
@@ -163,6 +170,12 @@ public class UserInfo {
 	}
 	public void setHangyename(String hangyename) {
 		this.hangyename = hangyename;
+	}
+	public String getIsadmin() {
+		return isadmin;
+	}
+	public void setIsadmin(String isadmin) {
+		this.isadmin = isadmin;
 	}
 	
 }

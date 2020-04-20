@@ -66,4 +66,69 @@ public interface LoginMapper {
 	 * @param integral
 	 */
 	void insertIntegralLog(Integral integral);
+	
+	/**
+	 * 查询平台ID是否已经存在
+	 * @param ptid
+	 * @return
+	 */
+	String selectUserInfoExtByPTID(String ptid);
+	
+	/**
+	 * 增加到接单用户表
+	 * @param userinfo
+	 */
+	void insertTakeUser(UserInfo userinfo);
+	
+	/**
+	 * 删除接单用户表
+	 * @param userinfo
+	 */
+	void deleteTakeUser(UserInfo userinfo);
+	
+	/**
+	 * 查询接单用户是否存在
+	 * @param userInfo
+	 * @return
+	 */
+	int selectTakeUser(UserInfo userInfo);
+	
+	/**
+	 * 查询是否已存在放单权限
+	 * @param userid
+	 * @return
+	 */
+	int isExistExtUser(String userid);
+	
+	/**
+	 * 增加放单权限
+	 * @param userid
+	 */
+	void insertExtUser(String userid);
+	
+	/**
+	 * 删除放单权限
+	 * @param userid
+	 */
+	void deleteExtUser(String userid);
+	
+	/**
+	 * 查询是否已存在接反对单权限
+	 * @param userid
+	 * @return
+	 */
+	int isExistOpposeUser(String userid);
+	
+	/**
+	 * 增加接反对单权限
+	 * @param userid
+	 */
+	void insertOpposeUser(String userid);
+	
+	/**
+	 * 删除接反对单权限
+	 * @param userid
+	 */
+	void deleteOpposeUser(String userid);
+	
 }
